@@ -1,0 +1,32 @@
+name: Deploy app manifests
+run-name: Deploy app manifests
+
+on:
+  push:
+    branches:
+      - master
+
+# Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
+# ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
+concurrency:
+  group: deploy-app-manifests
+
+jobs:
+  generate-manifest-per-env:
+    name: Generate manifest to ${{ matrix.environment }} environment
+    strategy:
+      fail-fast: false
+      matrix:
+        environment:
+          - deva
+          - int
+          - prs
+          - pred
+          - prod
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: println all envs
+        run: |
+        echo "Processing env ${{ matrix.environment }}"
