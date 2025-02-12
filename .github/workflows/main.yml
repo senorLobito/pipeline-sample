@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
   generate-manifest-per-env:
+    runs-on: ubuntu-latest
     name: Generate manifest to ${{ matrix.environment }} environment
     strategy:
       fail-fast: false
@@ -29,4 +30,4 @@ jobs:
     steps:
       - name: println all envs
         run: |
-        echo "Processing env ${{ matrix.environment }}"
+          echo "Processing env ${{ matrix.environment }}"
