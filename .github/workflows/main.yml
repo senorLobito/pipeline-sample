@@ -56,7 +56,7 @@ jobs:
           if [[ -z "$CHANGED_ENVS" ]]; then
             CHANGED_ENVS_JSON='[]'
           else
-            CHANGED_ENVS_JSON=$(echo "$CHANGED_ENVS" | jq -R -s -c 'split(" ")')
+            CHANGED_ENVS_JSON=$(echo "$CHANGED_ENVS" | jq -R -s -c -j 'split(" ")')
             echo "$CHANGED_ENVS_JSON"
           fi
 
