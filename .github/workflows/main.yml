@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - cdn/kis-fe/deploy_setup.json
+    # paths:
+      # - cdn/kis-fe/deploy_setup.json
 
 # Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
 # ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
@@ -19,7 +19,7 @@ jobs:
     name: Generate manifest to modified environments
     defaults:
       run:
-        working-directory: .github/scripts
+        working-directory: ../.github/scripts
     
     steps:
       - name: Checkout Repository
