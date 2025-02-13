@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - cdn/kis-fe/deploy-setup.yml
+      - cdn/kis-fe/deploy_setup.yml
 
 # Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
 # ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
@@ -16,20 +16,19 @@ concurrency:
 jobs:
   generate-manifest-per-env:
     runs-on: ubuntu-latest
-    name: Generate manifest to ${{ matrix.environment }} environment
-    strategy:
-      fail-fast: false
-      matrix:
-        environment:
-          - deva
-          - int
-          - prs
-          - pred
-          - prod
-    permissions:
-      contents: write
-      pull-requests: write
+    name: Generate manifest to modified environments
+    defaults:
+      run:
+        working-directory: ./scripts
+    
     steps:
-      - name: println all envs
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Make the script file executable
+        run: chmod +x get_changed_envs.sh  
+
+      - name: Get Changed Envs
+        id: changes
         run: |
-          echo "Processing env ${{ matrix.environment }}"
+          ./get_changed_envs.sh
