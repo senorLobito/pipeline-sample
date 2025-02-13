@@ -27,27 +27,6 @@ jobs:
       - name: Get Changed Envs
         # id: changes
         run: |
-          # ENVS=("deva" "int" "prs" "pred" "prod")
-          # CHANGED_ENVS="{}"
-
-          # OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
-          # NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
-
-          # for ENV in "${ENVS[@]}"; do
-          #   if diff <(echo "$OLD_SETUP_FILE" | jq -S ".$ENV") <(echo "$NEW_SETUP_FILE" | jq -S ".$ENV") > /dev/null; then
-          #     echo "No changes detected for $ENV"
-          #   else
-          #     echo "Changes detected for $ENV"
-          #     CHANGED_ENVS="$CHANGED_ENVS $ENV"
-          #   fi
-          # done
-
-          # # Trim leading/trailing spaces
-          # CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
-
-          # echo "Changed ENVS: $CHANGED_ENVS"
-
-          # # Output JSON matrix for GitHub Actions
           echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
 
   job2:
