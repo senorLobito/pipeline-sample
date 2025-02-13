@@ -51,12 +51,12 @@ jobs:
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           if [[ -z "$CHANGED_ENVS" ]]; then
-            MATRIX="matrix={\"has_envs\":false,\"envs\":[]}"
+            MATRIX="matrix={\"has_envs\":\"false\",\"envs\":[]}"
           else
             # remove last comma
             CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
 
-            MATRIX="matrix={\"has_envs\":true,\"envs\":[$CHANGED_ENVS]}"
+            MATRIX="matrix={\"has_envs\":\"true\",\"envs\":[$CHANGED_ENVS]}"
           fi
 
           # matrix
