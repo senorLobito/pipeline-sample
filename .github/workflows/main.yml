@@ -48,13 +48,13 @@ jobs:
           done
 
           # Trim leading spaces before setting GitHub Actions env variable
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)  # Removes extra spaces
-          
-          # Ensure a valid JSON array (default to empty [])
-          if [[ -z "$CHANGED_ENVS" ]]; then
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)  
+
+          # Convert space-separated string to JSON array
+          CHANGED_ENVS_JSON=$(jq -R -s 'split(" ")' <<< "$CHANGED_ENVS")
+
+          if [[ "$CHANGED_ENVS_JSON" == '[""]' ]]; then
             CHANGED_ENVS_JSON='[]'
-          else
-            CHANGED_ENVS_JSON=$(echo "$CHANGED_ENVS" | jq -R -s 'split(" ") | map(select(length > 0))')
           fi
 
           echo "matrix=$CHANGED_ENVS_JSON" >> $GITHUB_OUTPUT
