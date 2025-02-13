@@ -34,8 +34,8 @@ jobs:
           ENVS=("deva" "int", "prs", "pred", "prod")
           CHANGED_ENVS=""
 
-          OLD_SETUP_FILE=$(git show HEAD~1:deploy_setup.json)
-          NEW_SETUP_FILE=$(git show HEAD:deploy_setup.json)
+          OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
+          NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
 
           for ENV in "${ENVS[@]}"; do
             echo "Checking environment: $ENV"
