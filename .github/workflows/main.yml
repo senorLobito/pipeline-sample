@@ -32,7 +32,7 @@ jobs:
         id: changes
         run: |
           ENVS=("deva" "int" "prs" "pred" "prod")
-          CHANGED_ENVS=""
+          CHANGED_ENVS="{}"
 
           OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
@@ -52,11 +52,11 @@ jobs:
           echo "Changed ENVS: $CHANGED_ENVS"
 
           # Output JSON matrix for GitHub Actions
-          echo "matrix={}" >> "$GITHUB_OUTPUT" #$CHANGED_ENVS" >> "$GITHUB_OUTPUT"
+          echo "matrix=["deva","int"]" >> "$GITHUB_OUTPUT" #$CHANGED_ENVS" >> "$GITHUB_OUTPUT"
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    if: ${{ needs.get-changed-envs.outputs.matrix != [''] }} # skip if no env has changed
+    if: ${{ needs.get-changed-envs.outputs.matrix != '[]' }} # skip if no env has changed
     runs-on: ubuntu-latest
     strategy:
       matrix:
