@@ -47,7 +47,7 @@ jobs:
           done
 
           # Trim leading/trailing spaces
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | tr '\n' '')
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           echo "Changed ENVS: $CHANGED_ENVS"
 
