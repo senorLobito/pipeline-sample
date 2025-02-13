@@ -30,7 +30,7 @@ jobs:
         id: changes
         run: |
           ENVS=("deva" "int" "prs" "pred" "prod")
-          CHANGED_ENVS="matrix={\"envs\":["
+          CHANGED_ENVS=""
 
           OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
@@ -51,6 +51,9 @@ jobs:
           # CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           echo "Changed ENVS: $CHANGED_ENVS"
+
+          MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
+          echo $MATRIX  
 
           # Output JSON matrix for GitHub Actions
           echo "matrix={\"envs\":[\"deva\",\"int\"]}" >> $GITHUB_OUTPUT
