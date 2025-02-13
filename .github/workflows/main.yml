@@ -48,13 +48,16 @@ jobs:
           done
 
           # Trim leading/trailing spaces
+          echo "$CHANGED_ENVS"
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+          echo "$CHANGED_ENVS"
 
           # Ensure a valid JSON array
           if [[ -z "$CHANGED_ENVS" ]]; then
             CHANGED_ENVS_JSON='[]'
           else
             CHANGED_ENVS_JSON=$(echo "$CHANGED_ENVS" | jq -R -s -c 'split(" ")')
+            echo "$CHANGED_ENVS_JSON"
           fi
 
           # Debug output
