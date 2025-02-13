@@ -58,10 +58,10 @@ jobs:
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    if: ${{ needs.get-changed-envs.outputs.matrix != '[]' }} # skip if no env has changed
+    #if: ${{ needs.get-changed-envs.outputs.matrix != "[]" }} # skip if no env has changed
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.get-changed-envs.outputs.matrix || '[]') }}
+      matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
     permissions:
       contents: write
       pull-requests: write
