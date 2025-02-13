@@ -42,12 +42,13 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              CHANGED_ENVS="$CHANGED_ENVS $ENV"
+              CHANGED_ENVS="$CHANGED_ENVS |$ENV"
             fi
           done
 
           # Trim leading/trailing spaces
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | tr '\n' '')
+
           echo "Changed ENVS: $CHANGED_ENVS"
 
           # Output JSON matrix for GitHub Actions
