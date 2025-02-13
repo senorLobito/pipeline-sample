@@ -47,10 +47,15 @@ jobs:
           # changed envs
           echo "::debug::changed ENVS: $CHANGED_ENVS"
 
-          # remove last comma and close the array
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
+          if [[ -z "$CHANGED_ENVS" | xargs ]]; then
+            MATRIX="matrix={\"envs\":[]}"
+          else
+            # remove last comma and close the array
+            CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
+            MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
+          fi
 
-          MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
+          # matrix
           echo "::debug::final matrix: $MATRIX  
 
           # Output JSON matrix for GitHub Actions
