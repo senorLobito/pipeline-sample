@@ -30,7 +30,7 @@ jobs:
         id: changes
         run: |
           ENVS=("deva" "int" "prs" "pred" "prod")
-          CHANGED_ENVS="{}"
+          CHANGED_ENVS=""
 
           OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
