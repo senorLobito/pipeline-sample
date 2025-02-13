@@ -47,17 +47,21 @@ jobs:
             fi
           done
 
-          # Trim leading spaces before setting GitHub Actions env variable
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)  
+          # Trim leading/trailing spaces
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
-          # Convert space-separated string to JSON array
-          CHANGED_ENVS_JSON=$(jq -R -s 'split(" ")' <<< "$CHANGED_ENVS")
-
-          if [[ "$CHANGED_ENVS_JSON" == '[""]' ]]; then
+          # Ensure a valid JSON array
+          if [[ -z "$CHANGED_ENVS" ]]; then
             CHANGED_ENVS_JSON='[]'
+          else
+            CHANGED_ENVS_JSON=$(echo "$CHANGED_ENVS" | jq -R -s 'split(" ")')
           fi
 
-          echo "matrix=$CHANGED_ENVS_JSON" >> $GITHUB_OUTPUT
+          # Debug output
+          echo "CHANGED_ENVS_JSON=$CHANGED_ENVS_JSON"
+
+          # Output JSON matrix for GitHub Actions
+          echo "matrix=$CHANGED_ENVS_JSON" >> "$GITHUB_OUTPUT"
 
   generate-manifest-per-env:
     needs: get-changed-envs
