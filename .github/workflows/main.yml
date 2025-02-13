@@ -19,7 +19,7 @@ jobs:
     name: Generate manifest to modified environments
     defaults:
       run:
-        working-directory: ./.github/scripts
+        working-directory: .github/scripts
     
     steps:
       - name: Checkout Repository
