@@ -48,7 +48,7 @@ jobs:
           echo "::debug::changed ENVS: $CHANGED_ENVS"
 
           # trim leading spaces
-          # CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           if [[ -z "$CHANGED_ENVS" ]]; then
             MATRIX="matrix={\"envs\":[]}"
@@ -60,7 +60,7 @@ jobs:
           fi
 
           # matrix
-          echo "::debug::final matrix: $MATRIX  
+          echo "::debug::final matrix: $MATRIX"
 
           # Output JSON matrix for GitHub Actions
           echo "$MATRIX" >> $GITHUB_OUTPUT
