@@ -47,11 +47,15 @@ jobs:
           # changed envs
           echo "::debug::changed ENVS: $CHANGED_ENVS"
 
+          # trim leading spaces
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+
           if [[ -z "$CHANGED_ENVS" | xargs ]]; then
             MATRIX="matrix={\"envs\":[]}"
           else
-            # remove last comma and close the array
+            # remove last comma
             CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
+
             MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
           fi
 
