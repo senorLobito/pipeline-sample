@@ -19,14 +19,14 @@ jobs:
     name: Generate manifest to modified environments
     defaults:
       run:
-        working-directory: ../.github/scripts
+        working-directory: ./scripts
     
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Make the script file executable
-        run: chmod +x get_changed_envs.sh  
+        run: ls -la #chmod +x get_changed_envs.sh  
 
       - name: Get Changed Envs
         id: changes
