@@ -52,13 +52,11 @@ jobs:
 
           if [[ -z "$CHANGED_ENVS" ]]; then
             MATRIX="matrix={\"envs\":[]}"
-            HAS_ENVS="false"
           else
             # remove last comma
             CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
 
             MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
-            HAS_ENVS="true"
           fi
 
           # matrix
@@ -66,11 +64,10 @@ jobs:
 
           # Output JSON matrix for GitHub Actions
           echo "$MATRIX" >> $GITHUB_OUTPUT
-          echo "has_envs=$HAS_ENVS" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    if: ${{ needs.get-changed-envs.outputs.has_envs != 'false' }}
+    if: ${{ fromJSON(needs.get-changed-envs.outputs.matrix.envs != '[]') }}
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
