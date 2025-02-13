@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Get Changed Envs
+      - id: set-matrix
         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
 
   job2:
