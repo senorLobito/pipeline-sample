@@ -10,23 +10,57 @@ on:
 
 # Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
 # ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
-# concurrency:
-#   group: deploy-app-manifests
+concurrency:
+  group: deploy-app-manifests
 
 jobs:
-  job1:
+  get-changed-envs:
     runs-on: ubuntu-latest
     name: Generate manifest to modified environments
+    outputs:
+      matrix: ${{ steps.changes.outputs.matrix }}
     
     steps:
-      - id: set-matrix
-        run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-  job2:
-    needs: job1
+      - name: Get Changed Envs
+        id: changes
+        run: |
+          ENVS=("deva" "int" "prs" "pred" "prod")
+          CHANGED_ENVS="{}"
+
+          OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
+          NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
+
+          for ENV in "${ENVS[@]}"; do
+            if diff <(echo "$OLD_SETUP_FILE" | jq -S ".$ENV") <(echo "$NEW_SETUP_FILE" | jq -S ".$ENV") > /dev/null; then
+              echo "No changes detected for $ENV"
+            else
+              echo "Changes detected for $ENV"
+              CHANGED_ENVS="$CHANGED_ENVS $ENV"
+            fi
+          done
+
+          # Trim leading/trailing spaces
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+
+          echo "Changed ENVS: $CHANGED_ENVS"
+
+          # Output JSON matrix for GitHub Actions
+          echo "matrix={\"envs\":[\"deva\",\"int\"]}" >> $GITHUB_OUTPUT
+
+  generate-manifest-per-env:
+    needs: get-changed-envs
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - run: echo "Matrix - Project ${{ matrix.project }}, Config ${{ matrix.config }}"
+      - name: test
+        run: echo "ENV?? ${{matrix.envs}}"
           
