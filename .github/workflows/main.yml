@@ -14,7 +14,7 @@ concurrency:
   group: deploy-app-manifests
 
 jobs:
-  get-changed-envs:
+  job1:
     runs-on: ubuntu-latest
     name: Generate manifest to modified environments
     # defaults:
@@ -54,12 +54,11 @@ jobs:
           # Output JSON matrix for GitHub Actions
           echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
 
-  generate-manifest-per-env:
-    needs: get-changed-envs
+  job2:
+    needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.get-changed-envs.outputs.matrix)}}
+      matrix: ${{ fromJson(needs.job1.outputs.matrix) }}
     steps:
-      - name: test
-        run: echo "ENV?? ${{matrix.envs}}"
+      - run: echo "ENV?? ${{matrix.envs}}"
           
