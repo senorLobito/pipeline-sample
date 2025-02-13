@@ -40,7 +40,7 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              CHANGED_ENVS="$CHANGED_ENVS \"$ENV\","
+              CHANGED_ENVS="$CHANGED_ENVS\"$ENV\","
             fi
           done
 
@@ -48,7 +48,7 @@ jobs:
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
 
           # Trim leading/trailing spaces
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+          # CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           echo "Changed ENVS: $CHANGED_ENVS"
 
