@@ -47,4 +47,7 @@ jobs:
             fi
           done
 
+          # Trim leading spaces before setting GitHub Actions env variable
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)  # Removes extra spaces
+
           echo "$CHANGED_ENVS" >> $GITHUB_ENV
