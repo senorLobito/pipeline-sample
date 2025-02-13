@@ -48,7 +48,7 @@ jobs:
           echo "::debug::changed ENVS: $CHANGED_ENVS"
 
           # trim leading spaces
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+          # CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           if [[ -z "$CHANGED_ENVS" ]]; then
             MATRIX="matrix={\"envs\":[]}"
