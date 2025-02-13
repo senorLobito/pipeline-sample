@@ -19,6 +19,7 @@ jobs:
     name: Generate manifest to modified environments
     defaults:
       run:
+        shell: bash
         working-directory: ./scripts
     
     steps:
