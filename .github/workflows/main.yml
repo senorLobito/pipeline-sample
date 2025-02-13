@@ -30,7 +30,7 @@ jobs:
         id: changes
         run: |
           ENVS=("deva" "int" "prs" "pred" "prod")
-          CHANGED_ENVS=""
+          CHANGED_ENVS="matrix={\"envs\":["
 
           OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
@@ -40,9 +40,12 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              CHANGED_ENVS="$CHANGED_ENVS $ENV"
+              CHANGED_ENVS="$CHANGED_ENVS \"$ENV\","
             fi
           done
+
+          # remove last comma and close the array
+          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
 
           # Trim leading/trailing spaces
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
