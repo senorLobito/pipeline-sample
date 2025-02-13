@@ -38,7 +38,6 @@ jobs:
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
 
           for ENV in "${ENVS[@]}"; do
-            echo "Checking environment: $ENV"
             if diff <(echo "$OLD_SETUP_FILE" | jq -S ".$ENV") <(echo "$NEW_SETUP_FILE" | jq -S ".$ENV") > /dev/null; then
               echo "No changes detected for $ENV"
             else
@@ -49,6 +48,7 @@ jobs:
 
           # Trim leading/trailing spaces
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
+          echo "Changed ENVS: $CHANGED_ENVS"
 
           # Output JSON matrix for GitHub Actions
           echo "$CHANGED_ENVS" >> "$GITHUB_OUTPUT"
