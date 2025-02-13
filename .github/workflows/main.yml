@@ -50,7 +50,7 @@ jobs:
           # trim leading spaces
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
-          if [[ -z "$CHANGED_ENVS" | xargs ]]; then
+          if [[ -z "$CHANGED_ENVS" ]]; then
             MATRIX="matrix={\"envs\":[]}"
           else
             # remove last comma
