@@ -1,64 +1,17 @@
-name: Deploy app manifests
-run-name: Deploy app manifests
-
-on:
-  push:
-    branches:
-      - main
-    # paths:
-      # - cdn/kis-fe/deploy_setup.json
-
-# Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
-# ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
-concurrency:
-  group: deploy-app-manifests
-
+name: build
+on: push
 jobs:
   job1:
     runs-on: ubuntu-latest
-    name: Generate manifest to modified environments
-    # defaults:
-    #   run:
-    #     shell: bash
-    #     working-directory: ./scripts
-    
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      # - name: Checkout Repository
-      #   uses: actions/checkout@v4
-      #   with:
-      #     fetch-depth: 2
-
-      - name: Get Changed Envs
-        # id: changes
-        run: |
-          # ENVS=("deva" "int" "prs" "pred" "prod")
-          # CHANGED_ENVS="{}"
-
-          # OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
-          # NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
-
-          # for ENV in "${ENVS[@]}"; do
-          #   if diff <(echo "$OLD_SETUP_FILE" | jq -S ".$ENV") <(echo "$NEW_SETUP_FILE" | jq -S ".$ENV") > /dev/null; then
-          #     echo "No changes detected for $ENV"
-          #   else
-          #     echo "Changes detected for $ENV"
-          #     CHANGED_ENVS="$CHANGED_ENVS $ENV"
-          #   fi
-          # done
-
-          # # Trim leading/trailing spaces
-          # CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
-
-          # echo "Changed ENVS: $CHANGED_ENVS"
-
-          # # Output JSON matrix for GitHub Actions
-          echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
-
+      - id: set-matrix
+        run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
   job2:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.job1.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
-      - run: echo "ENV?? ${{matrix.envs}}"
-          
+      - run: echo "Matrix - Project ${{ matrix.project }}, Config ${{ matrix.config }}"
