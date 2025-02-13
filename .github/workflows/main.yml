@@ -10,8 +10,8 @@ on:
 
 # Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
 # ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
-concurrency:
-  group: deploy-app-manifests
+# concurrency:
+#   group: deploy-app-manifests
 
 jobs:
   job1:
