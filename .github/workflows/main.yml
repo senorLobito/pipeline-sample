@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - cdn/kis-fe/deploy_setup.yml
+      - cdn/kis-fe/deploy_setup.json
 
 # Nastavime, aby nikdy nebezelo vic instanci workflow najednou. Tim je zajisteno,
 # ze toto workflow naposledy pobezi vzdy na poslednim commitu v masteru.
