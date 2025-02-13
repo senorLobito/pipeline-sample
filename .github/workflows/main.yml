@@ -56,7 +56,7 @@ jobs:
           echo $MATRIX  
 
           # Output JSON matrix for GitHub Actions
-          echo "matrix={\"envs\":[\"deva\",\"int\"]}" >> $GITHUB_OUTPUT
+          echo "$MATRIX" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
     needs: get-changed-envs
