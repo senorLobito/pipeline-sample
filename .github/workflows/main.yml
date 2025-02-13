@@ -26,6 +26,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Fetch Previous Commit
+        run: git fetch origin HEAD~1  
+
       - name: Get Changed Envs
         id: changes
         run: |
