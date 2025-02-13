@@ -58,7 +58,7 @@ jobs:
     needs: get-changed-envs
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
+      matrix: ${{fromJSON(needs.get-changed-envs.outputs.matrix)}}
     steps:
       - name: test
         run: echo "ENV?? ${{matrix.envs}}"
