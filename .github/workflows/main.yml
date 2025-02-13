@@ -19,11 +19,6 @@ jobs:
     name: Generate manifest to modified environments
     
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
       - id: set-matrix
         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
 
