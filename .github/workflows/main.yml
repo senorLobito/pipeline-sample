@@ -52,20 +52,14 @@ jobs:
           echo "Changed ENVS: $CHANGED_ENVS"
 
           # Output JSON matrix for GitHub Actions
-          echo "matrix={\"environments\":[\"deva\",\"int\"]}" >> $GITHUB_OUTPUT
-          echo "matrix={\"environments\":[\"deva\",\"int\"]}"
-          #$CHANGED_ENVS" >> "$GITHUB_OUTPUT"
+          echo "matrix={\"envs\":[\"deva\",\"int\"]}" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    #if: ${{ needs.get-changed-envs.outputs.matrix != "[]" }} # skip if no env has changed
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: test
-        run: echo "ENV?? ${{matrix.environment}}"
+        run: echo "ENV?? ${{matrix.envs}}"
           
