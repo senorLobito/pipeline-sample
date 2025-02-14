@@ -68,7 +68,7 @@ jobs:
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    if: ${{ needs.get-changed-envs.outputs.matrix.envs != 'abcd' }}
+    if: ${{ needs.get-changed-envs.outputs.matrix.envs != '["abcd"]' }}
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
