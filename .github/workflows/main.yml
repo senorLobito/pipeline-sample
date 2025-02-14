@@ -19,6 +19,7 @@ jobs:
     name: Generate manifest to modified environments
     outputs:
       matrix: ${{ steps.changes.outputs.matrix }}
+      has_changes: ${{ steps.changes.outputs.has_changes }}
     
     steps:
       - name: Checkout Repository
@@ -51,24 +52,28 @@ jobs:
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           if [[ -z "$CHANGED_ENVS" ]]; then
-            MATRIX="matrix={\"envs\":\"abcd\"}"
+            HAS_CHANGES="has_changes=false"
+            MATRIX="matrix={\"envs\":[]}"
           else
+            HAS_CHANGES="has_changes=true"
+
             # remove last comma
             CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
-
             MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
           fi
 
-          # matrix
-          # echo "::debug::final matrix: $MATRIX"
-          echo "final matrix: $MATRIX"
+          echo "Any env has changed: $HAS_CHANGES"
 
-          # Output JSON matrix for GitHub Actions
+          # matrix
+          echo "::debug::final matrix: $MATRIX"
+
+          # Output JSON matrix and HAS_CHANGES for GitHub Actions
+          echo "$HAS_CHANGES" >> $GITHUB_OUTPUT
           echo "$MATRIX" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    if: ${{ needs.get-changed-envs.outputs.matrix.envs != '["abcd"]' }}
+    if: ${{ needs.get-changed-envs.outputs.has_changes != 'false' }}
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
