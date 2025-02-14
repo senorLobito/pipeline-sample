@@ -31,7 +31,7 @@ jobs:
         id: changes
         run: |
           ENVS=("deva" "int" "prs" "pred" "prod")
-          CHANGED_ENVS=""
+          CHANGED_ENVS=()
 
           OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
@@ -41,26 +41,19 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              CHANGED_ENVS="$CHANGED_ENVS\"$ENV\","
+              CHANGED_ENVS+=("\"$ENV\"")
             fi
           done
 
           # changed envs
-          echo "changed ENVS: $CHANGED_ENVS"
+          echo "changed ENVS: ${CHANGED_ENVS[*]}"
 
-          # trim leading spaces
-          CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
-
-          if [[ -z "$CHANGED_ENVS" ]]; then
+          if [[ ${CHANGED_ENVS[@]} -eq 0 ]]; then
             # HAS_CHANGES="has_changes=false"
             MATRIX="matrix={\"envs\":[]}"
           else
             # HAS_CHANGES="has_changes=true"
-
-            # remove last comma
-            CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
-            MATRIX="matrix={\"envs\":[$(echo "CHANGED_ENVS" | sed 's/\([^"]\+\)/"\1"/g')]}"
-
+              MATRIX="matrix={\"envs\":[$(IFS=,; echo "${CHANGED_ENVS[*]}")]}"
           fi
 
           echo "Any env has changed: $HAS_CHANGES"
