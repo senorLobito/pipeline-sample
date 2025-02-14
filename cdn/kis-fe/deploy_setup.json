@@ -12,11 +12,11 @@
     "repoUrl": "https://smth/smth"
   },
   "pred": {
-    "targetRevision": "0.0.1",
+    "targetRevision": "0.0.2",
     "repoUrl": "https://smth/smth"
   },
   "prod": {
-    "targetRevision": "0.0.1",
+    "targetRevision": "0.0.2",
     "repoUrl": "https://smth/smth"
   }
 }
