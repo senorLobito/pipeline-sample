@@ -41,12 +41,12 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              CHANGED_ENVS="$CHANGED_ENVS\""$ENV\""","
+              CHANGED_ENVS="$CHANGED_ENVS\"$ENV\","
             fi
           done
 
           # changed envs
-          echo "::debug::changed ENVS: $CHANGED_ENVS"
+          echo "changed ENVS: $CHANGED_ENVS"
 
           # trim leading spaces
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
