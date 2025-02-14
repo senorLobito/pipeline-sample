@@ -58,8 +58,9 @@ jobs:
             # HAS_CHANGES="has_changes=true"
 
             # remove last comma
-            CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//' | sed 's/\\"/"/g')
-            MATRIX="matrix={\"envs\":[$CHANGED_ENVS]}"
+            CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
+            MATRIX="matrix={\"envs\":[$(echo "CHANGED_ENVS" | sed 's/\([^"]\+\)/"\1"/g')]}"
+
           fi
 
           echo "Any env has changed: $HAS_CHANGES"
