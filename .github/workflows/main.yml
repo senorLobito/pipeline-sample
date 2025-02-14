@@ -51,7 +51,7 @@ jobs:
           CHANGED_ENVS=$(echo "$CHANGED_ENVS" | xargs)
 
           if [[ -z "$CHANGED_ENVS" ]]; then
-            MATRIX="matrix={\"envs\":[]}"
+            MATRIX="matrix={\"envs\":\"abcd\"}"
           else
             # remove last comma
             CHANGED_ENVS=$(echo "$CHANGED_ENVS" | sed 's/,*$//')
@@ -60,14 +60,15 @@ jobs:
           fi
 
           # matrix
-          echo "::debug::final matrix: $MATRIX"
+          # echo "::debug::final matrix: $MATRIX"
+          echo "final matrix: $MATRIX"
 
           # Output JSON matrix for GitHub Actions
           echo "$MATRIX" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    if: ${{ needs.get-changed-envs.outputs.matrix.envs != '[]' }}
+    if: ${{ needs.get-changed-envs.outputs.matrix.envs != 'abcd' }}
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
