@@ -65,7 +65,7 @@ jobs:
           echo "Any env has changed: $HAS_CHANGES"
 
           # matrix
-          echo "::debug::final matrix: $MATRIX"
+          echo "final matrix: $MATRIX"
 
           # Output JSON matrix and HAS_CHANGES for GitHub Actions
           # echo "$HAS_CHANGES" >> $GITHUB_OUTPUT
