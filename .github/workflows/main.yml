@@ -19,7 +19,7 @@ jobs:
     name: Generate manifest to modified environments
     outputs:
       matrix: ${{ steps.changes.outputs.matrix }}
-      # has_changes: ${{ steps.changes.outputs.has_changes }}
+      has_changes: ${{ steps.changes.outputs.has_changes }}
     
     steps:
       - name: Checkout Repository
@@ -49,18 +49,18 @@ jobs:
           echo "changed ENVS: ${CHANGED_ENVS[*]}"
 
           if [[ ${#CHANGED_ENVS[@]} -eq 0 ]]; then
-            # HAS_CHANGES="has_changes=false"
+            HAS_CHANGES="has_changes=false"
             MATRIX="matrix={\"envs\":[]}"
           else
-            # HAS_CHANGES="has_changes=true"
-              MATRIX="matrix={\"envs\":[$(IFS=,; echo "${CHANGED_ENVS[*]}")]}"
+            HAS_CHANGES="has_changes=true"
+            MATRIX="matrix={\"envs\":[$(IFS=,; echo "${CHANGED_ENVS[*]}")]}"
           fi
 
           # matrix
           echo "::debug final matrix: $MATRIX"
 
           # Output JSON matrix and HAS_CHANGES for GitHub Actions
-          # echo "$HAS_CHANGES" >> $GITHUB_OUTPUT
+          echo "$HAS_CHANGES" >> $GITHUB_OUTPUT
           echo "$MATRIX" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
