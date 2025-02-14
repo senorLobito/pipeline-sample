@@ -65,7 +65,7 @@ jobs:
 
   generate-manifest-per-env:
     needs: get-changed-envs
-    # if: ${{ needs.get-changed-envs.outputs.has_changes == 'true' }}
+    if: ${{ needs.get-changed-envs.outputs.has_changes == 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.get-changed-envs.outputs.matrix) }}
