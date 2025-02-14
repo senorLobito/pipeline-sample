@@ -48,7 +48,7 @@ jobs:
           # changed envs
           echo "changed ENVS: ${CHANGED_ENVS[*]}"
 
-          if [[ ${CHANGED_ENVS[@]} -eq 0 ]]; then
+          if [[ ${#CHANGED_ENVS[@]} -eq 0 ]]; then
             # HAS_CHANGES="has_changes=false"
             MATRIX="matrix={\"envs\":[]}"
           else
