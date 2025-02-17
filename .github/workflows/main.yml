@@ -55,7 +55,13 @@ jobs:
             MATRIX="matrix={\"envs\":[]}"
           else
             HAS_CHANGES="has_changes=true"
-            MATRIX="matrix={\"envs\":[$(IFS=,; echo "${CHANGED_ENVS[*]}")]}"
+            # MATRIX="matrix={\"envs\":
+              
+            # Convert the array into a JSON object
+            JSON_ENVS=$(printf '%s\n' "${CHANGED_ENVS[@]}" | awk -F':' '{print "\"" $1 "\": {\"ver\": \"" $2 "\", \"url\": \"" $3 "\"}"}' | jq -s 'add')
+  
+            # Wrap in "matrix"
+            MATRIX="matrix={\"envs\":$JSON_ENVS}"
           fi
 
           # matrix
