@@ -43,7 +43,7 @@ jobs:
               echo "Changes detected for $ENV"
               VERSION="$(jq -S --arg env "$ENV" '.[$env].targetRevision' <<< "$NEW_SETUP_FILE")"
               URL="$(jq -S --arg env "$ENV" '.[$env].repoUrl' <<< "$NEW_SETUP_FILE")"
-              CHANGED_ENVS+=("\"$ENV:$VERSION:$URL\"")
+              CHANGED_ENVS+=("{\"env\":\"$ENV\",\"ver\":\"$VERSION\",\"url\":\"$URL\"}")
             fi
           done
 
@@ -56,7 +56,7 @@ jobs:
           else
             HAS_CHANGES="has_changes=true"
             # MATRIX="matrix={\"envs\":
-              
+
             # Convert the array into a JSON object
             JSON_ENVS=$(printf '%s\n' "${CHANGED_ENVS[@]}" | awk -F':' '{print "\"" $1 "\": {\"ver\": \"" $2 "\", \"url\": \"" $3 "\"}"}' | jq -s 'add')
   
