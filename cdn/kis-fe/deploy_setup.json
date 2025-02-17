@@ -4,11 +4,11 @@
     "repoUrl": "https://smth/smthx"
   },
   "int": {
-    "targetRevision": "0.0.1",
+    "targetRevision": "0.0.2",
     "repoUrl": "https://smth/smthf"
   },
   "prs": {
-    "targetRevision": "0.0.5",
+    "targetRevision": "0.0.3",
     "repoUrl": "https://smth/smth"
   },
   "pred": {
