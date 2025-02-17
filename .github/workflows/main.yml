@@ -41,8 +41,8 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              VERSION="$(jq -S --arg env "$ENV" '.[$env].targetRevision' "$NEW_SETUP_FILE")"
-              URL="$(jq -S --arg env "$ENV" '.[$env].repoURL' "$NEW_SETUP_FILE")"
+              VERSION="$(jq -S --arg env "$ENV" '.[$env].targetRevision' <<< "$NEW_SETUP_FILE")"
+              URL="$(jq -S --arg env "$ENV" '.[$env].repoURL' <<< "$NEW_SETUP_FILE")"
               CHANGED_ENVS+=("\"$ENV:$VERSION:$URL\"")
             fi
           done
