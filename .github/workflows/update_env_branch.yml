@@ -1,7 +1,7 @@
 name: Create Pull Request to env/branch
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
         env_branch:
           description: 'The environment branch to create the commit/pull request to'

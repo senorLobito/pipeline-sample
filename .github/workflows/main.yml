@@ -41,7 +41,9 @@ jobs:
               echo "No changes detected for $ENV"
             else
               echo "Changes detected for $ENV"
-              CHANGED_ENVS+=("\"$ENV\"")
+              VERSION="$(jq -S '.$ENV.targetRevision' "$NEW_SETUP_FILE")"
+              URL="$(jq -S '.$ENV.repoURL' "$NEW_SETUP_FILE")"
+              CHANGED_ENVS+=("\"$ENV:$VERSION:$URL\"")
             fi
           done
 
@@ -64,6 +66,7 @@ jobs:
           echo "$MATRIX" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
+    runs-on: ubuntu-latest
     name: Create PR to changed ENV
     needs: get-changed-envs
     if: ${{ needs.get-changed-envs.outputs.has_changes == 'true' }}
@@ -72,9 +75,12 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: ./.github/workflows/update_env_branch.yml
-    with: 
-      environment: ${{ matrix.envs }}
+    steps:
+      - name: test
+        run: echo "ENV?? ${{matrix.envs}}"  
+    # uses: ./.github/workflows/update_env_branch.yml
+    # with: 
+    #   environment: ${{ matrix.envs }}
 
 
         
