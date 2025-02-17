@@ -1,0 +1,43 @@
+apiVersion: cdn.csas.cz/v1
+kind: StaticWebApplicationInternal
+metadata:
+  name: kis-fe
+#  annotations:
+#    app.csas.cz/source: https://github.com/csas-dev/cdn-sample-react-app
+#    cfgsrv.csas.cz/application: sample-react-app
+#    cfgsrv.csas.cz/label: cdn-swa-internal
+#    cfgsrv.csas.cz/profile: deva
+#    pipeline.csas.cz/next-env: deva
+spec:
+  source:
+    repoURL: ""
+    targetRevision: 0.0.0
+    config:
+      values:
+        artifact:
+          name: kis-fe
+          module: fe
+          repository: kis-generic-local
+          extension: zip
+        cdn:
+          swa: cdn-int-kis-fe # int = internal CDN
+          url: kis-fe
+          staticWebAppConfig:
+            content:
+              navigationFallback:
+                rewrite: /kis-fe/index.html
+                exclude:
+                  - /kis-fe/assets/*
+                  - /config/env.json
+        generateVersion:
+          enabled: true
+        applicationConfig:
+          path: config/env.json
+          content:
+            apiUrl: https://webapi-sys.csint.cz
+            webApiKey: c1ddfac2-3b87-4394-ba8c-67764373e0a4
+            loginScope: https://api.csast.cz/default
+            auth:
+              clientId: urn:csas:apps:kisfe
+              authority: https://fsidp.cs-test.cz/adfs/
+              knownAuthorities: ["https://fsidp.cs-test.cz/"]

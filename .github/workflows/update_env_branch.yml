@@ -1,0 +1,42 @@
+name: Create Pull Request to env/branch
+
+on:
+  workflow_dispatch:
+    inputs:
+        env_branch:
+          description: 'The environment branch to create the commit/pull request to'
+          required: true
+          type: string
+        file_path:
+          description: 'The path to the file in the master branch to be included in the pull request'
+          required: true
+          type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pull-request:
+    runs-on: csas-linux
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          path: master
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+
+      - name: Copy files from master to workspace
+        run: |
+          cp -r master/path/to/dir/* $GITHUB_WORKSPACE/
+
+      - name: Create pull request to env/branch
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          base: env/branch
+          branch: update/env-branch
+          commit-message: "chore: update env branch with new content"
+          title: "Update env branch with new content"
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}

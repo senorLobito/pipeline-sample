@@ -1,0 +1,37 @@
+apiVersion: cdn.csas.cz/v1
+kind: StaticWebApplicationInternal
+metadata:
+  name: kis-fe
+spec:
+  source:
+    repoURL: https://artifactory.csin.cz/artifactory/kis-generic-local/kis-fe/kis-fe-dev-b0b81e24-expire202502211347.zip
+    targetRevision: 0.0.0
+    config:
+      values:
+        artifact:
+          name: kis-fe
+          module: fe
+          repository: kis-generic-local
+          extension: zip
+        cdn:
+          swa: cdn-int-kis-fe # int = internal CDN
+          url: kis-fe
+          staticWebAppConfig:
+            content:
+              navigationFallback:
+                rewrite: /kis-fe/index.html
+                exclude:
+                  - /kis-fe/assets/*
+                  - /config/env.json
+        generateVersion:
+          enabled: true
+        applicationConfig:
+          path: config/env.json
+          content:
+            apiUrl: https://webapi-int.csint.cz
+            webApiKey: c99d51c0-da15-458c-a967-f9d36f66e16b
+            loginScope: https://api.csast.cz/default
+            auth:
+              clientId: urn:csas:apps:kisfe
+              authority: https://fsidp.cs-test.cz/adfs/
+              knownAuthorities: ["https://fsidp.cs-test.cz/"]
