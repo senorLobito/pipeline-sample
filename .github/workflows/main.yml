@@ -48,9 +48,9 @@ jobs:
               CHANGED_ENVS+="{\"env\":\"$ENV\",\"ver\":\"$VERSION\",\"url\":\"$URL\"},"
             fi
           done
-          echo "ABCD"
+          
           # changed envs
-          # echo "changed ENVS: "$CHANGED_ENVS"
+          echo "changed ENVS: $CHANGED_ENVS"
 
           if [[ "$CHANGED_ENVS" == "[" ]]; then
             HAS_CHANGES="has_changes=false"
@@ -58,9 +58,9 @@ jobs:
           else
             HAS_CHANGES="has_changes=true"
 
+            # remove trailing comma + add closing array ]
             CHANGED_ENVS="${CHANGED_ENVS%,}]"
-  
-            # Wrap in "matrix"
+
             MATRIX="matrix={\"envs\":$CHANGED_ENVS}"
           fi
 
