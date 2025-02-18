@@ -48,7 +48,7 @@ jobs:
               CHANGED_ENVS+="{\"env\":\"$ENV\",\"ver\":\"$VERSION\",\"url\":\"$URL\"},"
             fi
           done
-
+          echo "ABCD"
           # changed envs
           echo "changed ENVS: "$CHANGED_ENVS"
 

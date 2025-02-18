@@ -1,6 +1,6 @@
 {
   "deva": {
-    "targetRevision": "0.0.4",
+    "targetRevision": "0.0.2",
     "repoUrl": "https://smth/smthxo"
   },
   "int": {
@@ -16,7 +16,7 @@
     "repoUrl": "https://smth/smthxyz"
   },
   "prod": {
-    "targetRevision": "0.0.8",
+    "targetRevision": "0.0.9",
     "repoUrl": "https://smth/smthing"
   }
 }
