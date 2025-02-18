@@ -3,14 +3,18 @@ name: Create Pull Request to env/branch
 on:
   workflow_call:
     inputs:
-        env_branch:
+        environment:
           description: 'The environment branch to create the commit/pull request to'
           required: true
           type: string
-        file_path:
-          description: 'The path to the file in the master branch to be included in the pull request'
-          required: true
-          type: string
+    outputs:
+      pull-request-number:
+        description: Pull request number created by the workflow
+        value: ${{ jobs.generate.outputs.pull-request-number }}      
+
+env:
+  ENV_BRANCH: env-branch
+  MASTER_BRANCH: master-branch
 
 permissions:
   contents: write
@@ -20,17 +24,42 @@ jobs:
   create-pull-request:
     runs-on: csas-linux
     steps:
-      - name: Checkout master branch
+      - name: Set branch name
+        id: precheck
+        env:
+          INPUT_ENV: ${{ inputs.environment.env }}
+        run: |
+          echo "base_ref_name=env/${INPUT_ENV}" >> $GITHUB_OUTPUT
+      
+      - name: Checkout ${{ env.ENV_BRANCH }}
         uses: actions/checkout@v4
         with:
-          ref: master
-          path: master
+          path: ${{ env.ENV_BRANCH }}
+          ref: ${{ steps.precheck.outputs.base_ref_name }}
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
 
-      - name: Copy files from master to workspace
+      - name: Fetch the manifest file
+        id: fetch-manifest
         run: |
-          cp -r master/path/to/dir/* $GITHUB_WORKSPACE/
+          git show HEAD:cdn/kis-fe/manifest-int.yml > manifest-int.yml
+  
+      - name: Update manifest
+        env:
+            INPUT_VER: ${{ inputs.environment.ver }}
+            INPUT_URL: ${{ inputs.environemnt.url }}    
+        run: |
+          yq e '.spec.source.targetRevision = "$INPUT_VER"' -i manifest-int.yml
 
+        # - name: Commit and push changes
+        #   run: |
+        #     git config --global user.name "github-actions[bot]"
+        #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        #     git add manifest-int.yml
+        #     git commit -m "Update targetRevision in manifest-int.yml"
+        #     git push origin env/${{ inputs.environment }}
+        #   env:
+        #     GITHUB_TOKEN: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+            
       - name: Create pull request to env/branch
         id: cpr
         uses: peter-evans/create-pull-request@v7

@@ -42,9 +42,7 @@ jobs:
             else
               echo "Changes detected for $ENV"
               VERSION="$(jq -S --arg env "$ENV" '.[$env].targetRevision' <<< "$NEW_SETUP_FILE" | sed 's/\"//g')"
-              echo "$VERSION"
               URL="$(jq -S --arg env "$ENV" '.[$env].repoUrl' <<< "$NEW_SETUP_FILE" | sed 's/\"//g')"
-              echo "$URL"
               CHANGED_ENVS+="{\"env\":\"$ENV\",\"ver\":\"$VERSION\",\"url\":\"$URL\"},"
             fi
           done
@@ -72,7 +70,6 @@ jobs:
           echo "$MATRIX" >> $GITHUB_OUTPUT
 
   generate-manifest-per-env:
-    runs-on: ubuntu-latest
     name: Create PR to changed ENV
     needs: get-changed-envs
     if: ${{ needs.get-changed-envs.outputs.has_changes == 'true' }}
@@ -81,15 +78,16 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    steps:
-      - name: test
-        run: |
-          echo "ENV?? ${{matrix.envs.env}}"
-          echo "ver ${{matrix.envs.ver}}"  
-          echo "url ${{matrix.envs.url}}"  
-    # uses: ./.github/workflows/update_env_branch.yml
-    # with: 
-    #   environment: ${{ matrix.envs }}
+    uses: ./.github/workflows/update_env_branch.yml
+    with: 
+      environment: ${{ matrix.envs }}  
+    # steps:
+    #   - name: test
+    #     run: |
+    #       echo "ENV?? ${{matrix.envs.env}}"
+    #       echo "ver ${{matrix.envs.ver}}"  
+    #       echo "url ${{matrix.envs.url}}"  
+  
 
 
         
