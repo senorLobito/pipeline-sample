@@ -31,7 +31,7 @@ jobs:
         id: changes
         run: |
           ENVS=("deva" "int" "prs" "pred" "prod")
-          CHANGED_ENVS=()
+          CHANGED_ENVS="["
 
           OLD_SETUP_FILE=$(git show HEAD~1:cdn/kis-fe/deploy_setup.json)
           NEW_SETUP_FILE=$(git show HEAD:cdn/kis-fe/deploy_setup.json)
@@ -43,30 +43,23 @@ jobs:
               echo "Changes detected for $ENV"
               VERSION="$(jq -S --arg env "$ENV" '.[$env].targetRevision' <<< "$NEW_SETUP_FILE" | sed 's/\"//g')"
               URL="$(jq -S --arg env "$ENV" '.[$env].repoUrl' <<< "$NEW_SETUP_FILE" | sed 's/\"//g')"
-              CHANGED_ENVS+=("{\"env\":\"$ENV\",\"ver\":\"$VERSION\",\"url\":\"$URL\"}")
+              CHANGED_ENVS+="{\"env\":\"$ENV\",\"ver\":\"$VERSION\",\"url\":\"$URL\"},"
             fi
           done
 
           # changed envs
-          echo "changed ENVS: ${CHANGED_ENVS[*]}"
+          echo "changed ENVS: "$CHANGED_ENVS"
 
-          if [[ ${#CHANGED_ENVS[@]} -eq 0 ]]; then
+          if [[ "$CHANGED_ENVS" == "[" ]]; then
             HAS_CHANGES="has_changes=false"
             MATRIX="matrix={\"envs\":[]}"
           else
             HAS_CHANGES="has_changes=true"
-            # MATRIX="matrix={\"envs\":
 
-            JSON_ARR="["
-            for item in "${CHANGED_ENVS[@]}"; do
-              JSON_ARR+="$item,"
-            done
-            JSON_ARR="${JSON_ARR%,}]"
-
-            echo ${JSON_ARR}
+            CHANGED_ENVS="${CHANGED_ENVS%,}]"
   
             # Wrap in "matrix"
-            MATRIX="matrix={\"envs\":$JSON_ARR}"
+            MATRIX="matrix={\"envs\":$CHANGED_ENVS}"
           fi
 
           # matrix
@@ -88,7 +81,10 @@ jobs:
       pull-requests: write
     steps:
       - name: test
-        run: echo "ENV?? ${{matrix.envs}}"  
+        run: |
+          echo "ENV?? ${{matrix.envs.env}}"
+          echo "ver ${{matrix.envs.ver}}"  
+          echo "url ${{matrix.envs.url}}"  
     # uses: ./.github/workflows/update_env_branch.yml
     # with: 
     #   environment: ${{ matrix.envs }}
