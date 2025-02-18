@@ -1,10 +1,10 @@
 {
   "deva": {
-    "targetRevision": "0.0.3",
+    "targetRevision": "0.0.4",
     "repoUrl": "https://smth/smthxo"
   },
   "int": {
-    "targetRevision": "0.0.6",
+    "targetRevision": "0.0.78",
     "repoUrl": "https://smth/smthf"
   },
   "prs": {
