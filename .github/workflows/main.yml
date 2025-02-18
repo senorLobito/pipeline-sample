@@ -63,7 +63,7 @@ jobs:
             done
             JSON_ARR="${JSON_ARR%,}]"
 
-            echo $JSON_ARR
+            echo ${JSON_ARR}
   
             # Wrap in "matrix"
             MATRIX="matrix={\"envs\":$JSON_ENVS}"
