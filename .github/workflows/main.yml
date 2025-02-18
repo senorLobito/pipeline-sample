@@ -50,7 +50,7 @@ jobs:
           done
           echo "ABCD"
           # changed envs
-          echo "changed ENVS: "$CHANGED_ENVS"
+          # echo "changed ENVS: "$CHANGED_ENVS"
 
           if [[ "$CHANGED_ENVS" == "[" ]]; then
             HAS_CHANGES="has_changes=false"
