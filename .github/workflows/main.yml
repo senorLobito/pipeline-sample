@@ -59,7 +59,7 @@ jobs:
 
             JSON_ARR="["
             for item in "${CHANGED_ENVS[@]}"; do
-              json+="$item,"
+              JSON_ARR+="$item,"
             done
             JSON_ARR="${JSON_ARR%,}]"
 
