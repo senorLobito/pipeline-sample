@@ -8,7 +8,7 @@
     "repoUrl": "https://smth/smthf"
   },
   "prs": {
-    "targetRevision": "0.0.2",
+    "targetRevision": "0.0.3",
     "repoUrl": "https://smth/smth"
   },
   "pred": {
@@ -16,7 +16,7 @@
     "repoUrl": "https://smth/smthxyz"
   },
   "prod": {
-    "targetRevision": "0.0.7",
-    "repoUrl": "https://smth/smth"
+    "targetRevision": "0.0.8",
+    "repoUrl": "https://smth/smthing"
   }
 }
